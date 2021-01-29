@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rhel
+  labels:
+    app: rhel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rhel
+  template:
+    metadata:
+      labels:
+        app: rhel
+    spec:
+      #serviceAccountName: read-only
+      containers:
+      - name: rhel
+        image: registry.access.redhat.com/rhel7
+        ports:
+        - containerPort: 80
+        command:
+          - "bash"
+          - "-c"
+          - "--"
+        args:
+          - "while true; do sleep 30; done;"
