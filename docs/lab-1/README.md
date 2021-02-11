@@ -51,6 +51,10 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
 
 ### Steps
 
+1. Log into your cluster if you haven't already. You can do this by navigating to the `Quick Links and Common Commands` tab in OpenLabs and clicking on the command that starts with `oc login `.
+
+![loginCommand](../images/loginCommand.png)
+
 1. It is recommended that you create a new project when deploying applications rather than working in the `default` project so let's create one.
 
     ```sh
@@ -116,6 +120,8 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
     1. Click on `User Management` to expand the menu then click on `Service Accounts`
 
         ![service accounts](../images/serviceAccounts.png)
+
+    1. In the service accounts page, select `rbac-project` from the `Project` dropdown near the top of the page above the heading `Service Accounts`.
 
     1. In the list of service accounts, click on `helper`
 
