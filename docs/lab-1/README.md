@@ -19,9 +19,11 @@ This lab is comprised of the following sections:
 
 The following must be done before you can get started on the lab.
 
-1. Create your lab environment by following the steps found [here](https://ibm.github.io/workshop-setup/OPENLABS/){:target="_blank"}
+1. Gain access to your lab environment by following the steps found [here](https://ibm.github.io/workshop-setup/GRANTCLUSTER/){:target="_blank"}
 
-1. Once inside your environment, find the terminal and clone the workshop repository by entering:
+1. As mentioned in the link above, you can use the IBM Cloud Shell for the workshop which can be accessed here: [https://cloud.ibm.com/shell](https://cloud.ibm.com/shell){:target="_blank"}
+
+1. Once in the terminal, clone the workshop repository by entering:
 
     ```sh
     git clone https://github.com/IBM/openshift-rbac-scc.git
@@ -51,9 +53,7 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
 
 ### Steps
 
-1. Log into your cluster if you haven't already. You can do this by navigating to the `Quick Links and Common Commands` tab in OpenLabs and clicking on the command that starts with `oc login `.
-
-![loginCommand](../images/loginCommand.png)
+1. Log into your cluster by following the [steps outlined here](https://ibm.github.io/workshop-setup/ROKS/#login-to-openshift){:target="_blank"}.
 
 1. It is recommended that you create a new project when deploying applications rather than working in the `default` project so let's create one.
 
@@ -113,9 +113,7 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
 1. Let's authenticate with the API to see what permissions our new Service Account has:
 
     1. Switch to your terminal and paste in `export TOKEN=` without entering yet.
-    1. Open your OpenShift Cluster's console if you haven't already. You can find the link in the `Quick Links and Common Commands` page of your environment.
-
-        ![cluster link](../images/clusterLink.png)
+    1. Navigate back to your OpenShift Console that should be open in another browser tab.
 
     1. Click on `User Management` to expand the menu then click on `Service Accounts`
 
@@ -147,14 +145,14 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
     Now that we have the token we need the server address of the cluster that we are authenticating with.
 
     1. In your terminal paste in `export SERVER=` without entering yet.
-    1. In the `Quick Links and Common Commands` section, highlight and copy the cluster address in the second `Quick Links` bullet point. It should look like this:
+    1. Open up the `Copy login command` tab again and copy the server address.
 
-        ![serverAddress](../images/serverAddress.png)
+        ![serverAddress](../images/server.png)
 
     1. Go back to your terminal and paste in the server address so that the entire command reads something like:
 
         ```sh
-        export SERVER=https://c104-e.us-east.containers.cloud.ibm.com:31880
+        export SERVER=https://c104-e.us-east.containers.cloud.ibm.com:30166
         ```
 
         Then press enter.
@@ -179,9 +177,7 @@ In this first section of the lab we will be creating a `helper` **ServiceAccount
 
     You should see a bunch of errors regarding resources that this service account does not have access to. This is good as it means our permissions are working as intended.
 
-1. Let's switch back to our own user account. Scroll down on the `Quick Links and Common commands` page until you see a terminal command block with green text and a description above it that says `Log in to your OpenShift cluster`. Click on the command and it will automatically paste into your terminal and execute.
-
-    ![loginCommand](../images/loginCommand.png)
+1. Let's switch back to our own user account. Copy the login command from the `Copy login command` tab again.
 
 1. To give our new service account some permissions we will assign it the ClusterRole of `view`. This will allow `helper` to view the resources on the cluster without being able to modify anything. 
 
@@ -270,9 +266,7 @@ In this section we will:
 
 ### Steps
 
-1. Let's log back into our own user account. Scroll down on the `Quick Links and Common commands` page until you see a terminal command block with green text and a description above it that says `Log in to your OpenShift cluster`. Click on the command and it will automatically paste into your terminal and execute.
-
-    ![loginCommand](../images/loginCommand.png)
+1. Let's log back into our own user account. Copy the login command from the `Copy Login Command` tab again.
 
 1. Create a new project for this section
 
@@ -295,7 +289,7 @@ In this section we will:
 1. Create a deployment with the default SCC.
 
     ```sh
-    oc create -f RHELDeploy.yaml
+    oc create -f src/RHELDeploy.yaml
     ```
 
 1. Find the pod name that was just deployed
@@ -333,13 +327,13 @@ In this section we will:
 1. Delete the deployment
 
     ```sh
-    oc delete -f RHELDeploy.yaml
+    oc delete -f src/RHELDeploy.yaml
     ```
 
 1. Let's create our own custom SCC
 
     ```sh
-    oc create -f readonly-scc.yaml
+    oc create -f src/readonly-scc.yaml
     ```
 
     Let's examine the new SCC and see how it compares to `restricted`
@@ -359,13 +353,13 @@ In this section we will:
 1. Now, create a Role that allows us to use the SCC with a service account
 
     ```sh
-    oc create -f readonly-role.yaml
+    oc create -f src/readonly-role.yaml
     ```
 
 1. Then create a RoleBinding that ties the `read-only` service account to the new role that was just created.
 
     ```sh
-	oc create -f readonly-rolebinding.yaml
+	oc create -f src/readonly-rolebinding.yaml
     ```
 
 1. Before we try deploying the RHEL pod again we first need to specify in our deployment manifest (RHELDeploy.yaml) that we want to use our `read-only` service account to run the pod.
@@ -374,15 +368,15 @@ In this section we will:
 
     This command depends on what operating system you are working on.
 
-    If on Linux (such as on OpenLabs) try:
+    If on Linux (such as on IBM Cloud Shell) try:
     ```sh
-	sed -i 's/#//' RHELDeploy.yaml
+	sed -i 's/#//' src/RHELDeploy.yaml
     ```
 
     If on MacOSx try:
 
     ```sh
-    sed -i '' 's/#//' RHELDeploy.yaml
+    sed -i '' 's/#//' src/RHELDeploy.yaml
     ```
 
 1. With the comment removed, we can now deploy the file.
@@ -398,7 +392,7 @@ In this section we will:
     Deploy the application with:
 
     ```sh
-	oc create -f RHELDeploy.yaml
+	oc create -f src/RHELDeploy.yaml
     ```
 
 1. Let's go ahead and exec into our pod like before and see what has changed
