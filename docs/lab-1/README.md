@@ -14,7 +14,6 @@ This lab is comprised of the following sections:
 1. [Section 1: Authorization and User Permissions](#Section-1:-Authorization-and-User-Permissions)
 1. [Section 2: Container Permissions and SCCs](#Section-2:-Container-Permissions-and-SCCs)
 
-
 ## Setup
 
 The following must be done before you can get started on the lab.
@@ -289,7 +288,7 @@ In this section we will:
 1. Create a deployment with the default SCC.
 
     ```sh
-    oc create -f src/RHELDeploy.yaml
+    oc create -f RHELDeploy.yaml
     ```
 
 1. Find the pod name that was just deployed
@@ -327,13 +326,13 @@ In this section we will:
 1. Delete the deployment
 
     ```sh
-    oc delete -f src/RHELDeploy.yaml
+    oc delete -f RHELDeploy.yaml
     ```
 
 1. Let's create our own custom SCC
 
     ```sh
-    oc create -f src/readonly-scc.yaml
+    oc create -f readonly-scc.yaml
     ```
 
     Let's examine the new SCC and see how it compares to `restricted`
@@ -353,13 +352,13 @@ In this section we will:
 1. Now, create a Role that allows us to use the SCC with a service account
 
     ```sh
-    oc create -f src/readonly-role.yaml
+    oc create -f readonly-role.yaml
     ```
 
 1. Then create a RoleBinding that ties the `read-only` service account to the new role that was just created.
 
     ```sh
-	oc create -f src/readonly-rolebinding.yaml
+	oc create -f readonly-rolebinding.yaml
     ```
 
 1. Before we try deploying the RHEL pod again we first need to specify in our deployment manifest (RHELDeploy.yaml) that we want to use our `read-only` service account to run the pod.
@@ -370,13 +369,13 @@ In this section we will:
 
     If on Linux (such as on IBM Cloud Shell) try:
     ```sh
-	sed -i 's/#//' src/RHELDeploy.yaml
+	sed -i 's/#//' RHELDeploy.yaml
     ```
 
     If on MacOSx try:
 
     ```sh
-    sed -i '' 's/#//' src/RHELDeploy.yaml
+    sed -i '' 's/#//' RHELDeploy.yaml
     ```
 
 1. With the comment removed, we can now deploy the file.
@@ -392,7 +391,7 @@ In this section we will:
     Deploy the application with:
 
     ```sh
-	oc create -f src/RHELDeploy.yaml
+	oc create -f RHELDeploy.yaml
     ```
 
 1. Let's go ahead and exec into our pod like before and see what has changed
